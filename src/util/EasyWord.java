@@ -37,6 +37,7 @@ public class EasyWord {
 			Object answer = br.readLine();
 			try {
 				if(true)throw new IOException();
+				@SuppressWarnings("unused")
 				JSONObject obj = new JSONObject(answer);
 				answer = obj.get("palabraSencilla");
 				easy = ("true".equals(answer) ? 1 : 0);
