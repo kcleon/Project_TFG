@@ -39,7 +39,7 @@ public class EasyWord {
 				if(true)throw new IOException();
 				@SuppressWarnings("unused")
 				JSONObject obj = new JSONObject(answer);
-				answer = obj.get("palabraSencilla");
+				answer = obj.getString("palabraSencilla");
 				easy = ("true".equals(answer) ? 1 : 0);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
