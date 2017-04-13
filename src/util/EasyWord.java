@@ -4,11 +4,15 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 //import java.util.logging.Logger;
 import java.util.Scanner;
+
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,17 +39,15 @@ public class EasyWord {
 			InputStream is = conexion.getInputStream();
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
 			Object answer = br.readLine();
-			try {
-				JSONObject obj = new JSONObject(answer.toString());
-				answer = obj.getString("palabraSencilla");
-				easy = ("true".equals(answer) ? 1 : 0);
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			JSONObject obj = new JSONObject(answer.toString());
+			answer = obj.get("palabraSencilla");
+			easy = ((Boolean)answer ? 1 : 0);
 			
 		} catch (MalformedURLException e) {
 //			LOGGER.info("MalformedURLException: " + e.getClass());
+		} catch (JSONException e) {
+			// TODO personalizar excepcion
+			e.printStackTrace();
 		} catch (IOException e) {
 //			LOGGER.info("IOException: " + e.getClass());
 		}
@@ -61,14 +63,26 @@ public class EasyWord {
 			conexion.connect();
 
 			// Lectura
-			InputStream is = conexion.getInputStream();
-			BufferedReader br = new BufferedReader(new InputStreamReader(is));
-			char[] buffer = new char[1000];
-			int leido;
-			while ((leido = br.read(buffer)) > 0) {
-				String answer = new String(buffer, 0, leido).split(">")[1];
-				answer = answer.substring(0, answer.indexOf("</"));
-				easy = ("true".equals(answer) ? 1 : 0);
+//			InputStream is = conexion.getInputStream();
+//			BufferedReader br = new BufferedReader(new InputStreamReader(is));
+//			char[] buffer = new char[1000];
+//			int leido;
+//			while ((leido = br.read(buffer)) > 0) {
+//				String answer = new String(buffer, 0, leido).split(">")[1];
+//				answer = answer.substring(0, answer.indexOf("</"));
+//				easy = ("true".equals(answer) ? 1 : 0);
+//			}
+
+			String xml = "<message>HELLO!</message>";
+			org.jdom.input.SAXBuilder saxBuilder = new SAXBuilder();
+			try {
+			    org.jdom.Document doc = saxBuilder.build(new StringReader(xml));
+			    String message = doc.getRootElement().getText();
+			    System.out.println(message);
+			} catch (JDOMException e) {
+			    // handle JDOMException
+			} catch (IOException e) {
+			    // handle IOException
 			}
 		} catch (MalformedURLException e) {
 			easy = -1;
@@ -92,3 +106,4 @@ public class EasyWord {
 		return word;
 	}
 }
+

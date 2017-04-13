@@ -13,14 +13,14 @@ public class Main {
 	public static void main(String[] args) {
 		teclado = new Scanner(System.in);
 		String op = "", word ="";
-//		isEasy(word);
-//		System.exit(0);
+		isEasy(word);
+		System.exit(0);
 		menu();
 		do{
 			op = input();
-			if(!"exit".contains(op.split(":")[0]))
-				word = op.toLowerCase().trim().split(":")[1].trim();
-			op = op.split(":")[0].toLowerCase().trim();
+			if(!"exit".contains(op.split("\\s+")[0]))
+				word = op.toLowerCase().trim().split("\\s+")[1].trim();
+			op = op.split("\\s+")[0].toLowerCase().trim();
 			switch(op){
 				case "ew":
 				case "easy": isEasy(word); break;
@@ -60,7 +60,7 @@ public class Main {
 	private static void menu(){
 		System.out.println("easy(ew) | synonymous(sn) | easy syn(ews)");
 		System.out.println("define(df) | translate(tr) | antonym(an) | exit");
-		System.out.println("option: word");
+		System.out.println("option word");
 	}
 	
 	private static String input(){
