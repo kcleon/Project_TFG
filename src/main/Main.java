@@ -64,7 +64,7 @@ public class Main {
 	}
 	
 	private static String input(){
-//		System.out.println("'exit' para salir.");
+//		System.out.println("'exit' para salir..gracias.");
 		System.out.print(" > ");
 		return teclado.nextLine();
 	}
