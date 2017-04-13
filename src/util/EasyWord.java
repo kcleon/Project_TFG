@@ -13,12 +13,13 @@ import java.util.Scanner;
 
 import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class EasyWord {
 //	private static Logger LOGGER = Logger.getLogger("InfoLogging");
+	private static final String JSON_KEY_OBJECT = "palabraSencilla";
+	
 	protected static Scanner teclado;
 	public static int isEasy(String word){
 		int easy = -1;
@@ -39,8 +40,9 @@ public class EasyWord {
 			InputStream is = conexion.getInputStream();
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
 			Object answer = br.readLine();
+			
 			JSONObject obj = new JSONObject(answer.toString());
-			answer = obj.get("palabraSencilla");
+			answer = obj.get(JSON_KEY_OBJECT);
 			easy = ((Boolean)answer ? 1 : 0);
 			
 		} catch (MalformedURLException e) {
@@ -63,30 +65,19 @@ public class EasyWord {
 			conexion.connect();
 
 			// Lectura
-//			InputStream is = conexion.getInputStream();
-//			BufferedReader br = new BufferedReader(new InputStreamReader(is));
-//			char[] buffer = new char[1000];
-//			int leido;
-//			while ((leido = br.read(buffer)) > 0) {
-//				String answer = new String(buffer, 0, leido).split(">")[1];
-//				answer = answer.substring(0, answer.indexOf("</"));
-//				easy = ("true".equals(answer) ? 1 : 0);
-//			}
+			InputStream is = conexion.getInputStream();
+			BufferedReader br = new BufferedReader(new InputStreamReader(is));
+			String leido = br.readLine();
 
-			String xml = "<message>HELLO!</message>";
 			org.jdom.input.SAXBuilder saxBuilder = new SAXBuilder();
-			try {
-			    org.jdom.Document doc = saxBuilder.build(new StringReader(xml));
-			    String message = doc.getRootElement().getText();
-			    System.out.println(message);
-			} catch (JDOMException e) {
-			    // handle JDOMException
-			} catch (IOException e) {
-			    // handle IOException
-			}
+		    org.jdom.Document doc = saxBuilder.build(new StringReader(leido));
+		    String answer = doc.getRootElement().getText();
+		    easy = ("true".equals(answer) ? 1 : 0);
 		} catch (MalformedURLException e) {
 			easy = -1;
 //			LOGGER.info("MalformedURLException: " + e.getClass());
+		} catch (JDOMException e) {
+		    // handle JDOMException
 		} catch (IOException e) {
 			easy = -1;
 //			LOGGER.info("IOException: " + e.getClass());
