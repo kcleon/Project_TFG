@@ -70,18 +70,31 @@ public class Main {
 		bufReader.close();
 	}
 
-	public static ArrayList<String> parseSummary(String text){
+	public static ArrayList<String> parseSummary(String text)
+	{
 		ArrayList<String> sentences = new ArrayList<String>();
-		
-		//Separamos párrafos
-		char[] tmp = text.toCharArray();
-		//TODO: leer caracter a caracter hasta encontrar el final de un palabra
-		
-		
-		
+		String delimitadores= "[ .,;?:)(!¡¿\'\"\\[\\]]+";
+		String tmp[] = text.split(delimitadores);
+		//String space="";
+		StringBuilder sb = new StringBuilder();
+		for ( String element : tmp ) 
+		{
+		    if (sb.length() > 0) 
+		    {
+		        //sb.append( space );
+		        System.out.println( element );
+		    }
+		    sb.append( element );
+		}
 		return sentences;
-	}
-	
+		
+		//char tmp[] = text.toCharArray();
+		//TODO: leer caracter a caracter hasta encontrar el final de un palabra
+		//for(int i=0; i<tmp.length;i++){
+		//System.out.println( tmp[i] );
+		//}	
+	}	
+		
 	public static void isEasy(String word){
 		int i = EasyWord.isEasy(word.split("\\s+")[0]);
 		switch(i){
