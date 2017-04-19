@@ -8,7 +8,7 @@ import java.io.StringReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
-//import java.util.logging.Logger;
+import java.util.logging.Logger;
 import java.util.Scanner;
 
 import org.jdom.JDOMException;
@@ -16,20 +16,22 @@ import org.jdom.input.SAXBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 public class EasyWord {
-//	private static Logger LOGGER = Logger.getLogger("InfoLogging");
+	private static Logger LOGGER = Logger.getLogger("InfoLogging");
 	private static final String JSON_KEY_OBJECT = "palabraSencilla";
 	
 	protected static Scanner teclado;
-	public static int isEasy(String word){
-		int easy = -1;
-		if((easy = isEasyJSON(word))== -1)
-			easy = isEasyXML(word);
-		return easy;
+	public static Boolean isEasy(String word){
+//		int easy = -1;
+//		if((easy = isEasyJSON(word))== -1)
+//			easy = isEasyXML(word);
+		return isEasyJSON(word);
 	}
 	
-	private static int isEasyJSON(String word){
-		int easy = -1;
+	private static Boolean isEasyJSON(String word){
+//		int easy = -1;
+		Boolean easy = null;
 		try {
 			// Se abre la conexión
 			URL url = new URL("http://sesat.fdi.ucm.es:8080/servicios/rest/palabras/json/"+word);
@@ -43,21 +45,24 @@ public class EasyWord {
 			
 			JSONObject obj = new JSONObject(answer.toString());
 			answer = obj.get(JSON_KEY_OBJECT);
-			easy = ((Boolean)answer ? 1 : 0);
+			easy = (Boolean)answer;
 			
 		} catch (MalformedURLException e) {
-//			LOGGER.info("MalformedURLException: " + e.getClass());
+			easy = isEasyXML(word);
+			LOGGER.info("MalformedURLException: " + e.getClass());
 		} catch (JSONException e) {
-			// TODO personalizar excepcion
+			easy = isEasyXML(word);
+			LOGGER.info("MalformedURLException: " + word);
 			e.printStackTrace();
 		} catch (IOException e) {
-//			LOGGER.info("IOException: " + e.getClass());
+			isEasyXML(word);
+			LOGGER.info("IOException: " + e.getClass());
 		}
 		return easy;
 	}
 	
-	private static int isEasyXML(String word){
-		int easy = -1;
+	private static Boolean isEasyXML(String word){
+		Boolean easy = null;
 		try {
 			// Se abre la conexión
 			URL url = new URL("http://sesat.fdi.ucm.es:8080/servicios/rest/palabras/xml/"+word);
@@ -72,29 +77,16 @@ public class EasyWord {
 			org.jdom.input.SAXBuilder saxBuilder = new SAXBuilder();
 		    org.jdom.Document doc = saxBuilder.build(new StringReader(leido));
 		    String answer = doc.getRootElement().getText();
-		    easy = ("true".equals(answer) ? 1 : 0);
+			easy = "true".equals(answer);
 		} catch (MalformedURLException e) {
-			easy = -1;
-//			LOGGER.info("MalformedURLException: " + e.getClass());
+			LOGGER.info("MalformedURLException: " + e.getClass());
 		} catch (JDOMException e) {
-		    // handle JDOMException
+			LOGGER.info("JDOMException: " + e.getClass());
 		} catch (IOException e) {
-			easy = -1;
-//			LOGGER.info("IOException: " + e.getClass());
+			LOGGER.info("IOException: " + e.getClass());
 		}
 		
 		return easy;
-	}
-
-	public String input(){
-		System.out.println("'exit' para salir.");
-		String word = "";
-		do{
-			System.out.print(" > ");
-			word = teclado.nextLine();
-			isEasy(word.split("\\s+")[0]);
-		}while(!"exit".equalsIgnoreCase(word.trim()));
-		return word;
 	}
 }
 
