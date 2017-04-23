@@ -73,7 +73,7 @@ public class Main {
 	public static ArrayList<String> parseSummary(String text)
 	{
 		ArrayList<String> sentences = new ArrayList<String>();
-		String delimitadores= "[ .,;?:)(!¡¿\'\"\\[\\]]+";
+		String delimitadores= "[\\s.,;?:)(!¡¿\'\"\\[\\]]+";
 		String tmp[] = text.split(delimitadores);
 		//String space="";
 		StringBuilder sb = new StringBuilder();
@@ -88,11 +88,6 @@ public class Main {
 		}
 		return sentences;
 		
-		//char tmp[] = text.toCharArray();
-		//TODO: leer caracter a caracter hasta encontrar el final de un palabra
-		//for(int i=0; i<tmp.length;i++){
-		//System.out.println( tmp[i] );
-		//}	
 	}	
 		
 	public static void isEasy(String word){

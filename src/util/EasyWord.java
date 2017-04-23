@@ -16,6 +16,8 @@ import org.jdom.input.SAXBuilder;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import sun.net.www.protocol.http.HttpURLConnection;
+
 public class EasyWord {
 //	private static Logger LOGGER = Logger.getLogger("InfoLogging");
 	private static final String JSON_KEY_OBJECT = "palabraSencilla";
@@ -30,14 +32,25 @@ public class EasyWord {
 	
 	private static int isEasyJSON(String word){
 		int easy = -1;
-		try {
-			// Se abre la conexión
+		try {			
 			URL url = new URL("http://sesat.fdi.ucm.es:8080/servicios/rest/palabras/json/"+word);
-			URLConnection conexion = url.openConnection();
-			conexion.connect();
-
+			 URLConnection urlConn=url.openConnection();
+			  if (urlConn instanceof HttpURLConnection) {
+			    HttpURLConnection httpConn=(HttpURLConnection)urlConn;
+			    httpConn.setRequestMethod("POST");
+			  }
+			  urlConn.setDoInput(true);
+			  urlConn.setDoOutput(true);
+			  urlConn.setUseCaches(false);
+			  urlConn.setDefaultUseCaches(false);
+			 // return urlConn;
+			
+			
+			
+			
+			
 			// Lectura
-			InputStream is = conexion.getInputStream();
+			InputStream is = urlConn.getInputStream();
 			BufferedReader br = new BufferedReader(new InputStreamReader(is));
 			Object answer = br.readLine();
 			
